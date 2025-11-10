@@ -432,8 +432,7 @@ def main():
     """Main CLI function for the Multi-Agent Debate System.
     
     Example usage:
-        # Basic usage with environment variable for API key:
-        export OPENAI_API_KEY="your-api-key-here"
+        # Basic usage (API key from .env file):
         python debate_system.py "Write a Python function to calculate fibonacci numbers"
         
         # With custom configuration:
@@ -443,14 +442,23 @@ def main():
         python debate_system.py "Create a REST API endpoint" --model gpt-3.5-turbo
     
     The system will:
-    1. Initialize the specified number of agents
-    2. Run the debate for the specified number of rounds
-    3. Display the complete debate history
-    4. Show the final selected solution
+    1. Load API key from .env file
+    2. Initialize the specified number of agents
+    3. Run the debate for the specified number of rounds
+    4. Display the complete debate history
+    5. Show the final selected solution
     """
     import argparse
     import os
     import sys
+    
+    # Load environment variables from .env file
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+    except ImportError:
+        print("Warning: python-dotenv not installed. Install with: pip install python-dotenv", file=sys.stderr)
+        print("Falling back to system environment variables.", file=sys.stderr)
     
     # Set up argument parser
     parser = argparse.ArgumentParser(
@@ -468,13 +476,6 @@ Examples:
         "problem",
         type=str,
         help="The problem statement or task description for the agents to solve"
-    )
-    
-    parser.add_argument(
-        "--api-key",
-        type=str,
-        default=None,
-        help="OpenAI API key (defaults to OPENAI_API_KEY environment variable)"
     )
     
     parser.add_argument(
@@ -519,12 +520,13 @@ Examples:
     
     args = parser.parse_args()
     
-    # Get API key from argument or environment variable
-    api_key = args.api_key or os.environ.get("OPENAI_API_KEY")
+    # Get API key from environment variable
+    api_key = os.environ.get("OPENAI_API_KEY")
     
     if not api_key:
         print("Error: OpenAI API key is required.", file=sys.stderr)
-        print("Provide it via --api-key argument or OPENAI_API_KEY environment variable.", file=sys.stderr)
+        print("Please set OPENAI_API_KEY in your .env file or environment variables.", file=sys.stderr)
+        print("See .env.example for reference.", file=sys.stderr)
         sys.exit(1)
     
     # Validate problem statement

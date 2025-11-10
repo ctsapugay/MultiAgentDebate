@@ -31,12 +31,16 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 3. Install dependencies:
 ```bash
-pip install openai
+pip install -r requirements.txt
 ```
 
 4. Set up your OpenAI API key:
 ```bash
-export OPENAI_API_KEY="your-api-key-here"
+# Copy the example .env file
+cp .env.example .env
+
+# Edit .env and add your OpenAI API key
+# OPENAI_API_KEY=your-actual-api-key-here
 ```
 
 ## Usage
@@ -73,13 +77,18 @@ python debate_system.py "Your problem" --solution-only
 ### Command-Line Arguments
 
 - `problem` (required): The problem statement or task description
-- `--api-key`: OpenAI API key (defaults to OPENAI_API_KEY environment variable)
 - `--agents`: Number of agents (default: 3)
 - `--rounds`: Maximum number of rounds (default: 3)
 - `--model`: OpenAI model to use (default: gpt-4)
 - `--temperature`: Temperature parameter 0-2 (default: 0.7)
 - `--history-only`: Display only debate history
 - `--solution-only`: Display only final solution
+
+### Environment Variables
+
+The system uses a `.env` file to manage configuration:
+
+- `OPENAI_API_KEY`: Your OpenAI API key (required)
 
 ## How It Works
 
@@ -147,7 +156,8 @@ Round N (Critiques) → Solution Selection → Final Result
 ## Requirements
 
 - Python 3.7+
-- OpenAI Python SDK
+- OpenAI Python SDK (`openai`)
+- python-dotenv (`python-dotenv`)
 - Valid OpenAI API key
 
 ## License

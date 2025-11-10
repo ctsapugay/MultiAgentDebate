@@ -28,6 +28,7 @@ Thumbs.db
 
 # Environment variables
 .env
+!.env.example
 
 # Kiro specs (project planning files)
 .kiro/
